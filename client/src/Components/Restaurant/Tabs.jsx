@@ -1,27 +1,64 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import classnames from "classnames";
+import { useLocation, Link, useParams } from "react-router-dom";
 
-const RestaurantTabs = ({ name, route, isActive }) => {
+const Tab = (props) => {
+  const { id } = useParams();
+  return (
+    <Link to={`/restaurant/${id}/${props.route}`}>
+      <div
+        className={classnames("text-gray-500 relative font-light ", {
+          "text-zomato-400 font-semibold ": props.isActive,
+        })}
+      >
+        <h3 className="text-lg md:text-xl">{props.title}</h3>
+      </div>
+    </Link>
+  );
+};
+
+const TabContainer = (props) => {
+  const location = useLocation();
+
+  const currentPath = location.pathname;
+
+  const tabs = [
+    {
+      title: "Overview",
+      route: "overview",
+      isActive: currentPath.includes("overview"),
+    },
+    {
+      title: "Order Online",
+      route: "order-online",
+      isActive: currentPath.includes("order-online"),
+    },
+    {
+      title: "Reviews",
+      route: "reviews",
+      isActive: currentPath.includes("reviews"),
+    },
+    {
+      title: "Menu",
+      route: "menu",
+      isActive: currentPath.includes("menu"),
+    },
+    {
+      title: "Photos",
+      route: "photos",
+      isActive: currentPath.includes("photos"),
+    },
+  ];
+
   return (
     <>
-      <Link to={`/restaurant/dada/${route}`}>
-        <div
-          className={classnames("py-2 px-4 ", {
-            "border-b-2 border-brand": isActive,
-          })}
-        >
-          <h3
-            className={classnames("text-gray-700 font-semibold lg:text-xl", {
-              "text-brand": isActive,
-            })}
-          >
-            {name}
-          </h3>
-        </div>
-      </Link>
+      <div className="flex relative items-center pb-4 gap-8 md:gap-20 overflow-x-scroll border-b-2">
+        {tabs.map((tab) => (
+          <Tab {...tab} key={`123${tab.route}`} />
+        ))}
+      </div>
     </>
   );
 };
 
-export default RestaurantTabs;
+export default TabContainer;

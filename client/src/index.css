@@ -2,21 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  background-color: #fff;
-  overflow-x: hidden;
-}
-
-.slick-slide {
-  padding: 0 8px;
-  box-sizing: border-box;
-}
-
-.slick-prev:before,
-.slick-next:before {
-  color: #e23744 !important;
-}
-
 .leaflet-container {
-  width: 100%;
+  width: inherit;
+  height: inherit;
 }

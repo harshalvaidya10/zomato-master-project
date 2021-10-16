@@ -1,58 +1,64 @@
-import React from "react";
-import {
-  LazyLoadImage,
-  trackWindowScroll,
-} from "react-lazy-load-image-component";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { AiTwotoneStar } from "react-icons/ai";
+import { getImage } from "../Redux/Reducer/Image/Image.action";
 
-import Rating from "./Ratings";
+const RestaurantCard = (props) => {
+  const [image, setImage] = useState({
+    images: [],
+  });
+  const dispatch = useDispatch();
 
-const RestaurantCard = ({
-  image,
-  title,
-  cuisine,
-  averageCost,
-  quantity,
-  rating,
-}) => {
+  useEffect(() => {
+    props.photos &&
+      dispatch(getImage(props.photos)).then((data) =>
+        setImage(data.payload.image)
+      );
+  }, [props.photos]);
+
   return (
-    <>
-      <div className="w-full md:w-1/3 md:px-2 mb-10">
-        <div className="w-full rounded-lg  h-64	overflow-hidden">
-          <LazyLoadImage
-            effect="blur"
-            src={image}
-            alt={title}
-            className="rounded-lg w-full h-full object-cover transform transition duration-500  hover:scale-110"
-            placeholder={
-              <div className="animate-pulse w-full h-full bg-gray-200 "></div>
-            }
-            wrapperClassName="w-full h-full"
+    <Link to={`/restaurant/${props._id}`} className="w-full">
+      <div className="bg-white p-4 mb-4  w-full rounded-2xl transition duration-700 ease-in-out hover:shadow-lg md:w-1/2 lg:w-1/3">
+        <div className="w-full h-56 lg:h-64 relative">
+          <div className="absolute w-full bottom-4 flex items-end justify-between">
+            <div className="flex flex-col gap-2 items-start">
+              {props.isPro && (
+                <span className="bg-zomato-400 text-white px-2 py-1 rounded text-sm">
+                  Pro extra 10% off
+                </span>
+              )}
+              {props.isOff && (
+                <span className="bg-blue-600 text-white px-2 py-1 rounded text-sm">
+                  ₹{`${props.isOff}`} OFF
+                </span>
+              )}
+            </div>
+            <span className="bg-white bg-opacity-75 p-1 rounded	mr-3">
+              {props.durationOfdelivery} min
+            </span>
+          </div>
+          <img
+            src={image.images.length && image.images[0].location}
+            alt="food"
+            className="w-full h-full rounded-2xl"
           />
         </div>
-        <div className="mt-2">
-          <h1 className="text-2xl font-semibold text-gray-700">{title}</h1>
-          <span>
-            {rating ? (
-              <>
-                <Rating value={rating} />
-                <span className="font-bold text-gray-700">4.1</span>
-                <span className="text-gray-500">(47.6K Delivery Reviews)</span>
-              </>
-            ) : (
-              <>
-                {" "}
-                <span className="text-gray-500">No ratings available</span>
-              </>
-            )}
-          </span>
-          <p className="text-gray-600 text-lg mb-2 truncate ">{cuisine}</p>
-          <h5 className="text-gray-600 text-lg">
-            ₹{averageCost} {quantity || "for one"}
-          </h5>
+        <div className="my-2 flex flex-col gap-2">
+          <div className="flex items-center justify-between">
+            <h4 className="text-xl font-medium">{props.name}</h4>
+            <span className="bg-green-800 text-white text-sm p-1 rounded flex items-center">
+              {props.restaurantReviewValue} <AiTwotoneStar />
+            </span>
+          </div>
+          <div className="flex items-center justify-between text-gray-500">
+            <p>{props.cuisine.join(", ")}</p>
+            <p>₹ {props.averageCost} for one</p>
+          </div>
         </div>
       </div>
-    </>
+    </Link>
   );
 };
 
-export default trackWindowScroll(RestaurantCard);
+export default RestaurantCard;

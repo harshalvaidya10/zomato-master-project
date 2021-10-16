@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
-import { Route, Redirect } from "react-router-dom";
+import React from "react";
+import { Route } from "react-router-dom";
 
 // Layout
 import RestaurantLayout from "../Layout/Restaurant.layout";
 
-const RestaurantHOC = ({ component: Component, ...rest }) => {
+const RestaurantLayoutHOC = ({ component: Component, ...rest }) => {
   return (
     <>
       <Route
@@ -19,4 +19,4 @@ const RestaurantHOC = ({ component: Component, ...rest }) => {
   );
 };
 
-export default RestaurantHOC;
+export default RestaurantLayoutHOC;
